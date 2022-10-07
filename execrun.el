@@ -188,7 +188,7 @@ See function `execrun--string-compare-p' for argument TYPE."
 
 ;;;###autoload
 (defun execrun-project-file (file title)
-  "Compile IN-FILENAME from the project"
+  "Compile FILE from the project with TITLE."
   (interactive)
   (execrun-compile (jcs-find-file-in-project-and-current-dir file title)))
 
