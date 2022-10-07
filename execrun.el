@@ -93,12 +93,14 @@
 
 (defun execrun--get-buffers (str type)
   "Return a list of buffers that match STR.
-TYPE is the return type; can be 'object or 'string."
+
+TYPE is the return type; can be `object or `string."
   (execrun--get-buffers-regexp (regexp-quote str) type))
 
 (defun execrun--get-buffers-regexp (regexp type)
   "Return a list of buffers that match REGEXP.
-TYPE is the return type; can be 'object or 'string."
+
+TYPE is the return type; can be `object or `string."
   (let (buf-lst buf-name)
     (if (not (stringp regexp))
         (user-error "[WARNING] Can't get buffers with this string/regexp: %s" regexp)
