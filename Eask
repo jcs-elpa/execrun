@@ -1,6 +1,6 @@
 (package "execrun"
          "0.1.0"
-		 "")
+         "Run through `compilation-mode'")
 
 (website-url "https://github.com/jcs-elpa/execrun")
 (keywords "tools")

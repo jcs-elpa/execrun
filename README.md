@@ -2,7 +2,7 @@
 [![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/execrun.svg)](https://jcs-emacs.github.io/jcs-elpa/#/execrun)
 
 # execrun
-> 
+> Run through `compilation-mode`
 
 [![CI](https://github.com/jcs-elpa/execrun/actions/workflows/test.yml/badge.svg)](https://github.com/jcs-elpa/execrun/actions/workflows/test.yml)
 
