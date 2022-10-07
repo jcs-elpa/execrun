@@ -57,6 +57,11 @@
   :type 'string
   :group 'execrun)
 
+(defcustom execrun-kill-buffer-function #'kill-this-buffer
+  "Function to kill output buffer."
+  :type 'function
+  :group 'execrun)
+
 ;;
 ;; (@* "Entry" )
 ;;
@@ -261,7 +266,7 @@ IN-OP : inpuit operation script."
       (save-window-excursion
         (execrun-previous)
         (setq prev-output-buf (current-buffer))))
-    (kill-this-buffer)
+    (funcall execrun-kill-buffer-function)
     (when prev-output-buf (switch-to-buffer prev-output-buf))))
 
 (provide 'execrun)
