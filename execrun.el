@@ -31,6 +31,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (require 'f)
 
 (defgroup execrun nil
@@ -81,12 +83,63 @@
   :init-value nil)
 
 ;;
+;; (@* "Util" )
+;;
+
+(defun execrun--get-buffers (str type)
+  "Return a list of buffers that match STR.
+TYPE is the return type; can be 'object or 'string."
+  (execrun--get-buffers-regexp (regexp-quote str) type))
+
+(defun execrun--get-buffers-regexp (regexp type)
+  "Return a list of buffers that match REGEXP.
+TYPE is the return type; can be 'object or 'string."
+  (let (buf-lst buf-name)
+    (if (not (stringp regexp))
+        (user-error "[WARNING] Can't get buffers with this string/regexp: %s" regexp)
+      (dolist (buf (buffer-list))
+        (setq buf-name (buffer-name buf))
+        (when (and (stringp buf-name) (string-match-p regexp buf-name))
+          (cl-case type
+            (`object (push buf buf-lst))
+            (`string (push buf-name buf-lst))))))
+    buf-lst))
+
+(defun execrun--string-compare-p (regexp str type &optional ignore-case)
+  "Compare STR with REGEXP by TYPE.
+
+Argument TYPE can be on of the following symbol.
+
+  * regex - uses function `string-match-p'.  (default)
+  * strict - uses function `string='.
+  * prefix - uses function `string-prefix-p'.
+  * suffix - uses function `string-suffix-p'.
+
+Optional argument IGNORE-CASE is only uses when TYPE is either symbol `prefix'
+or `suffix'."
+  (cl-case type
+    (`strict (string= regexp str))
+    (`prefix (string-prefix-p regexp str ignore-case))
+    (`suffix (string-suffix-p regexp str ignore-case))
+    (t (ignore-errors (string-match-p regexp str)))))
+
+(defun execrun--buffer-filter (name &optional type)
+  "Return a list of buffers with NAME.
+
+See function `execrun--string-compare-p' for argument TYPE."
+  (let (lst)
+    (dolist (buf (buffer-list))
+      (when (execrun--string-compare-p name (buffer-name buf) type)
+        (push buf lst)))
+    lst))
+
+;;
 ;; (@* "Control Output" )
 ;;
 
 (defun execrun-list-compilation ()
   "Return the list of compilation buffers."
-  (jcs-buffer-filter (format "[*]%s[*]: " execrun-base-buffer-name) 'regex))
+  (execrun--buffer-filter (format "[*]%s[*]: " execrun-base-buffer-name) 'regex))
 
 (defun execrun-set-compilation-index (index lst)
   "Set compilation buffer with INDEX and LST."
@@ -119,7 +172,7 @@
   "Switch to one of the output buffer."
   (interactive)
   (let* ((output-prefix (execrun--form-file-prefix))
-         (output-buf-lst (jcs-get-buffers output-prefix 'string))
+         (output-buf-lst (execrun--get-buffers output-prefix 'string))
          choice)
     (if (not output-buf-lst)
         (user-error "[INFO] No output buffer available: %s" output-buf-lst)
@@ -132,6 +185,7 @@
   (interactive)
   (execrun-compile (jcs-find-file-in-project-and-current-dir file title)))
 
+;;;###autoload
 (defun execrun-compile (in-op)
   "Compile command rewrapper.
 IN-OP : inpuit operation script."
