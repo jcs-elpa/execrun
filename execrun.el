@@ -246,7 +246,7 @@ IN-OP : inpuit operation script."
         (bury-buffer)
         (execrun-set-compilation-index (1- index) output-lst)
         (setq break t))
-      (setq index (1+ index)))))
+      (cl-incf index))))
 
 ;;;###autoload
 (defun execrun-next ()
@@ -257,7 +257,7 @@ IN-OP : inpuit operation script."
       (when (equal (current-buffer) (nth index output-lst))
         (execrun-set-compilation-index (1+ index) output-lst)
         (setq break t))
-      (setq index (1+ index)))))
+      (cl-incf index))))
 
 ;;;###autoload
 (defun execrun-maybe-kill-buffer ()
