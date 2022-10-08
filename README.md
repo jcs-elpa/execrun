@@ -8,7 +8,8 @@
 
 ## 🔨 Usage
 
-WIP
+* `M-x execrun-build`
+* `M-x execrun-run`
 
 ## Contribute
 
