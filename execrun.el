@@ -46,6 +46,12 @@
 (defconst execrun-base-buffer-name "execrun"
   "Base filename for compilation buffer.")
 
+(defcustom execrun-script-extensions
+  '("[.]sh" "[.]bat" "[.]ps1")
+  "A list of script file extension in RegExp."
+  :type 'list
+  :group 'execrun)
+
 (defconst execrun-script-extension
   (if (memq system-type '(cygwin windows-nt ms-dos)) "[.]bat" "[.]sh")
   "Script file extension in RegExp.")
@@ -225,6 +231,12 @@ IN-OP : inpuit operation script."
 ;;
 ;; (@* "Functions" )
 ;;
+
+;;;###autoload
+(defun execrun ()
+  "Select the script to execute."
+  (interactive)
+  (execrun-project-file execrun-script-extensions "Build script: "))
 
 ;;;###autoload
 (defun execrun-build ()
