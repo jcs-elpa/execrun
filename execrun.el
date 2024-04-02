@@ -236,7 +236,7 @@ IN-OP : inpuit operation script."
 (defun execrun ()
   "Select the script to execute."
   (interactive)
-  (execrun-project-file execrun-script-extensions "Build script: "))
+  (execrun-project-file execrun-script-extensions "Script file: "))
 
 ;;;###autoload
 (defun execrun-build ()
